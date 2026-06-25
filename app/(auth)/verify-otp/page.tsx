@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function VerifyOtpPage() {
+// 1. Komponen Internal untuk menangani searchParams
+function OtpFormContent() {
   const [otp, setOtp] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -18,7 +19,6 @@ export default function VerifyOtpPage() {
     try {
       if (!email) throw new Error("Email tidak ditemukan.");
 
-      // 1. Verifikasi OTP dengan Supabase
       const { data, error } = await supabase.auth.verifyOtp({
         email: email,
         token: otp,
@@ -27,8 +27,6 @@ export default function VerifyOtpPage() {
 
       if (error) throw error;
 
-      // 2. Jika sukses, simpan profil ke tabel 'profiles'
-      // Data diambil dari metadata yang kita simpan saat Sign Up
       const { error: profileError } = await supabase.from('profiles').insert([
         {
           id: data.user?.id,
@@ -44,7 +42,6 @@ export default function VerifyOtpPage() {
 
       alert('Verifikasi berhasil! Silakan login.');
       router.push('/login');
-
     } catch (err: any) {
       alert('Verifikasi Gagal: ' + err.message);
     } finally {
@@ -53,6 +50,29 @@ export default function VerifyOtpPage() {
   };
 
   return (
+    <form onSubmit={handleVerify} className="space-y-4">
+      <input 
+        type="text" 
+        value={otp} 
+        onChange={(e) => setOtp(e.target.value)} 
+        placeholder="Masukkan kode OTP" 
+        className="w-full p-3 border border-gray-300 rounded-xl text-center text-lg tracking-widest text-black"
+        required 
+      />
+      <button 
+        type="submit" 
+        disabled={loading} 
+        className="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-700 transition disabled:bg-gray-400"
+      >
+        {loading ? 'Memproses...' : 'Verifikasi Sekarang'}
+      </button>
+    </form>
+  );
+}
+
+// 2. Komponen Utama dengan Suspense
+export default function VerifyOtpPage() {
+  return (
     <main className="min-h-screen flex items-center justify-center bg-slate-900 p-4">
       <div className="w-full max-w-sm bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
         <h2 className="text-xl font-bold text-center text-blue-950 mb-6">Verifikasi OTP</h2>
@@ -60,23 +80,10 @@ export default function VerifyOtpPage() {
           Masukkan kode 8 digit yang telah dikirim ke email Anda.
         </p>
 
-        <form onSubmit={handleVerify} className="space-y-4">
-          <input 
-            type="text" 
-            value={otp} 
-            onChange={(e) => setOtp(e.target.value)} 
-            placeholder="Masukkan kode OTP" 
-            className="w-full p-3 border border-gray-300 rounded-xl text-center text-lg tracking-widest text-black"
-            required 
-          />
-          <button 
-            type="submit" 
-            disabled={loading} 
-            className="w-full bg-blue-600 text-white p-3 rounded-xl font-bold hover:bg-blue-700 transition disabled:bg-gray-400"
-          >
-            {loading ? 'Memproses...' : 'Verifikasi Sekarang'}
-          </button>
-        </form>
+        {/* Suspense membungkus komponen yang menggunakan useSearchParams */}
+        <Suspense fallback={<p className="text-center">Loading...</p>}>
+          <OtpFormContent />
+        </Suspense>
       </div>
     </main>
   );
