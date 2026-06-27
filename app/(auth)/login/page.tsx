@@ -88,7 +88,7 @@ export default function LoginPage() {
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               className="w-full p-2.5 border border-gray-200 rounded-xl text-sm" 
-              placeholder="nama@email.com" 
+              placeholder="Masukan Email Anda" 
             />
           </div>
 
@@ -107,7 +107,7 @@ export default function LoginPage() {
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
                 className="w-full p-2.5 pr-11 border border-gray-200 rounded-xl text-sm" 
-                placeholder="••••••••" 
+                placeholder="Password" 
               />
               <button
                 type="button"
