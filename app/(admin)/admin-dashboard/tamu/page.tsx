@@ -26,6 +26,7 @@ export default function KelolaTamuPage() {
     }
   };
 
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-6">👥 Mengelolah Laporan Tamu</h1>

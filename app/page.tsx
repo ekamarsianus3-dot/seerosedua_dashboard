@@ -8,7 +8,7 @@ export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const hotelName = " PENGINAPAN SEEROSEDUA "; 
+  const hotelName = " PENGINAPAN SEE ROSE II "; 
 
   // Cek apakah pengguna sudah login atau belum saat membuka halaman
   useEffect(() => {
