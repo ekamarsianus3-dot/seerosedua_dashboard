@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'lucide-react'; // Import ikon
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -11,7 +12,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   
-  // 1. Tambahkan state untuk pesan error
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMessage(null); // Reset pesan error saat klik login
+    setErrorMessage(null);
 
     try {
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
@@ -28,7 +28,6 @@ export default function LoginPage() {
       });
 
       if (authError) {
-        // 2. Custom pesan error agar lebih ramah pengguna
         if (authError.message === "Invalid login credentials") {
           setErrorMessage("Email atau password yang Anda masukkan salah.");
         } else {
@@ -74,7 +73,6 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white/95 backdrop-blur-md p-8 rounded-2xl shadow-2xl text-black border border-gray-100 relative z-30">
         <h2 className="text-2xl font-bold text-center mb-6 text-blue-950">Masuk Akun</h2>
         
-        {/* 3. Tampilkan pesan error di sini */}
         {errorMessage && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 text-sm rounded-xl text-center">
             {errorMessage}
@@ -82,7 +80,6 @@ export default function LoginPage() {
         )}
         
         <form onSubmit={handleLogin} className="space-y-4">
-          {/* ... (bagian input email tetap sama) ... */}
           <div>
             <label className="text-xs font-bold text-gray-700 uppercase block mb-1">Email</label>
             <input 
@@ -98,7 +95,6 @@ export default function LoginPage() {
           <div>
             <div className="flex justify-between items-center mb-1">
                 <label className="text-xs font-bold text-gray-700 uppercase">Password</label>
-                {/* 4. Link Lupa Password */}
                 <Link href="/forgot-password" className="text-xs font-bold text-blue-600 hover:underline">
                     Lupa password?
                 </Link>
@@ -118,7 +114,11 @@ export default function LoginPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-blue-600 transition"
               >
-                 {/* ... (ikon mata tetap sama) ... */}
+                 {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
               </button>
             </div>
           </div>
