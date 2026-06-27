@@ -6,7 +6,7 @@ export default function TentangPage() {
       <div className="prose max-w-none bg-gray-50 p-6 rounded-2xl border mb-8">
         <h2 className="text-xl font-bold mb-3 text-slate-800">Aturan & Tata Tertib Penginapan</h2>
         <ul className="list-disc pl-5 space-y-2 text-gray-700">
-          <li>Waktu <strong>Check-In</strong> dimulai pukul 14:00 WIB.</li>
+          <li>Waktu <strong>Check-In</strong> dimulai pukul 12:00 WIB.</li>
           <li>Waktu <strong>Check-Out</strong> maksimal pukul 12:00 WIB.</li>
           <li>Dilarang membawa hewan peliharaan ke dalam area kamar.</li>
           <li>Dilarang merokok di dalam kamar bertipe AC.</li>
