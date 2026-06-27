@@ -21,8 +21,8 @@ export default function KamarTamuPage() {
 
   const getRoomImages = (namaKamar: string) => {
     const name = namaKamar.toLowerCase();
-    if (name.includes('ac')) return ['/images/ac1.jpg', '/images/ac2.jpg'];
-    return ['/images/kipas1.jpg', '/images/kipas2.jpg'];
+    if (name.includes('ac')) return ['/images/ac1.jpg', '/images/ac2.jpg', '/images/ac3.jpg'];
+    return ['/images/kipas1.jpg', '/images/kipas2.jpg', '/images/kipas3.jpg'];
   };
 
   return (
