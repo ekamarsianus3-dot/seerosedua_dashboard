@@ -22,7 +22,7 @@ export default function TamuLayout({ children }: { children: React.ReactNode }) 
         <div className="max-w-7xl mx-auto px-4 h-16 flex justify-between items-center">
           {/* Logo diarahkan ke root / (Landing Page Utama) */}
           <Link href="/" className="text-xl font-bold text-blue-600 tracking-wide">
-            SEEROSEDUA HOTEL
+            PENGINAPAN SEE ROSE II 
           </Link>
 
           {/* Menu Desktop */}
@@ -82,7 +82,7 @@ export default function TamuLayout({ children }: { children: React.ReactNode }) 
 
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-8 text-center text-sm border-t border-gray-800">
-        <p>&copy; 2026 Seerosedua Hotel. All rights reserved.</p>
+        <p>&copy; 2026 PENGINAPAN SEE ROSE II. All rights reserved.</p>
       </footer>
     </div>
   );
