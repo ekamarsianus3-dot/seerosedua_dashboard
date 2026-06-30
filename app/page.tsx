@@ -8,7 +8,7 @@ export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const hotelName = " PENGINAPAN SEE ROSE II ";
+  const hotelName = " PENGINAPAN SEE ROSE II "; 
 
   // Cek apakah pengguna sudah login atau belum saat membuka halaman
   useEffect(() => {
@@ -30,22 +30,22 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col">
-
+      
       {/* NAVBAR */}
       <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-wider text-blue-600">
             {hotelName}
           </Link>
-
+          
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-4">
             {loading ? (
               <span className="text-sm text-gray-400 animate-pulse">Memeriksa sesi...</span>
             ) : user ? (
               /* Jika Sudah Login */
-              <Link
-                href="/kamar"
+              <Link 
+                href="/kamar" 
                 className="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition shadow-md"
               >
                 Area Tamu (Pesan Kamar)
@@ -53,14 +53,14 @@ export default function HomePage() {
             ) : (
               /* Jika Belum Login */
               <>
-                <Link
-                  href="/login"
+                <Link 
+                  href="/login" 
                   className="px-5 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold hover:bg-gray-50 transition text-black"
                 >
                   Masuk Tamu
                 </Link>
-                <Link
-                  href="/register"
+                <Link 
+                  href="/register" 
                   className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition shadow-md"
                 >
                   Daftar Sekarang
@@ -93,10 +93,10 @@ export default function HomePage() {
       </nav>
 
       {/* HERO SECTION */}
-      <header
+      <header 
         className="relative pt-20 h-[80vh] flex items-center justify-center bg-cover bg-center text-white"
-        style={{
-          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/images/login-bg.jpg')`
+        style={{ 
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/images/login-bg.jpg')` 
         }}
       >
         <div className="max-w-4xl mx-auto text-center px-6 space-y-6">
@@ -109,9 +109,11 @@ export default function HomePage() {
           </p>
           <div className="pt-4">
             {/* Tombol Utama Dinamis */}
-            <Link
-              href={user ? "/kamar" : "/login"}
-              className={`inline-block font-bold px-8 py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 ${user ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-amber-500 hover:bg-amber-600 text-blue-950'}`}
+            <Link 
+              href={user ? "/kamar" : "/login"} 
+              className={`inline-block font-bold px-8 py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 ${
+                user ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-amber-500 hover:bg-amber-600 text-blue-950'
+              }`}
             >
               {user ? "Lihat Katalog & Pesan Kamar" : "Lihat & Pesan Kamar Sekarang"}
             </Link>
