@@ -81,7 +81,7 @@ export default function HomePage() {
         {menuOpen && (
           <div className="md:hidden bg-blue-950 border-b border-blue-900 px-6 py-4 flex flex-col gap-3 shadow-lg">
             {user ? (
-              <Link href="/kamar" onClick={() => setMenuOpen(false)} className="text-green-400 font-semibold py-1">Area Tamu (Pesan Kamar)</Link>
+              <Link href="/kamar" onClick={() => setMenuOpen(false)} className="text-green-400 font-semibold py-1">(Pesan Kamar)</Link>
             ) : (
               <>
                 <Link href="/login" onClick={() => setMenuOpen(false)} className="text-white font-medium py-1">Masuk Tamu</Link>
@@ -115,7 +115,7 @@ export default function HomePage() {
                 user ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-amber-500 hover:bg-amber-600 text-blue-950'
               }`}
             >
-              {user ? "Lihat Katalog & Pesan Kamar" : "Lihat & Pesan Kamar Sekarang"}
+              {user ? "Lihat Katalog & Pesan Kamar" : "Pesan Kamar"}
             </Link>
           </div>
         </div>

@@ -7,14 +7,7 @@ export default function TentangPage() {
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       
       {/* --- PERUBAHAN 1: Header (Navbar) ditambahkan agar memiliki warna yang sama dengan footer --- */}
-      <nav className="bg-blue-950 z-50 border-b border-blue-900 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-wider text-white">
-            PENGINAPAN SEE ROSE II
-          </Link>
-          <Link href="/" className="text-blue-100 hover:text-white font-semibold transition">Beranda</Link>
-        </div>
-      </nav>
+    
 
       <main className="flex-1 max-w-4xl mx-auto py-12 px-4 text-gray-800">
         <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Tentang Penginapan Seerosedua</h1>
@@ -52,10 +45,7 @@ export default function TentangPage() {
         </div>
       </main>
 
-      {/* --- PERUBAHAN 2: Footer disesuaikan warnanya menjadi bg-blue-950 --- */}
-      <footer className="bg-blue-950 text-gray-400 py-8 text-sm text-center border-t border-blue-900">
-        <p>© 2026 PENGINAPAN SEE ROSE II. Hak Cipta Dilindungi.</p>
-      </footer>
+   
     </div>
   );
 }
