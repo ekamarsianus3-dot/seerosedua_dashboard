@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-import Link from 'next/link';
 
 export default function RiwayatPembayaranPage() {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -17,13 +16,12 @@ export default function RiwayatPembayaranPage() {
       return;
     }
 
-    // Query dengan join ke tabel payments
+    // Mengambil status booking yang sudah diupdate oleh admin
     const { data, error } = await supabase
       .from('bookings')
       .select(`
         id, lama_menginap, total_harga, status, created_at,
-        guests (nama),
-        payments (status)
+        guests (nama)
       `)
       .eq('user_id', user.id) 
       .order('created_at', { ascending: false });
@@ -34,6 +32,16 @@ export default function RiwayatPembayaranPage() {
   };
 
   useEffect(() => { fetchRiwayat(); }, []);
+
+  // Fungsi untuk memberi warna pada label status
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'confirmed': return 'bg-green-100 text-green-700 border-green-200';
+      case 'pending': return 'bg-amber-100 text-amber-700 border-amber-200';
+      case 'cancelled': return 'bg-red-100 text-red-700 border-red-200';
+      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto py-12 px-4 text-slate-800">
@@ -48,15 +56,19 @@ export default function RiwayatPembayaranPage() {
               <div>
                 <h4 className="font-bold text-lg">{b.guests?.nama}</h4>
                 <p className="text-sm text-gray-500">Durasi: {b.lama_menginap} Malam</p>
-                {/* Menampilkan Status Booking & Pembayaran */}
-                <div className="mt-2 flex gap-2">
-                  <span className="text-xs bg-blue-100 px-2 py-1 rounded">Booking: {b.status}</span>
-                  <span className="text-xs bg-purple-100 px-2 py-1 rounded">
-                    Bayar: {b.payments?.[0]?.status || 'Belum'}
+                
+                {/* Menampilkan Status Konfirmasi Admin */}
+                <div className="mt-3">
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(b.status)}`}>
+                    Status: {b.status === 'pending' ? 'Menunggu Konfirmasi' : b.status.toUpperCase()}
                   </span>
                 </div>
               </div>
-              <p className="font-bold text-blue-600">Rp {b.total_harga.toLocaleString()}</p>
+              
+              <div className="text-right">
+                <p className="text-sm text-gray-400">Total Tagihan</p>
+                <p className="font-bold text-blue-600 text-lg">Rp {b.total_harga.toLocaleString('id-ID')}</p>
+              </div>
             </div>
           ))}
         </div>

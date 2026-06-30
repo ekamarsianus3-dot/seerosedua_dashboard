@@ -18,8 +18,7 @@ function BookingFormContent() {
   const [detailTamu, setDetailTamu] = useState({ nama: '', no_hp: '', alamat: '' });
   const [totalHarga, setTotalHarga] = useState(0);
 
-  // Harga telah diperbarui: Kipas Angin = 150.000
-  const hargaKamar = roomType === 'ac' ? 200000 : 150000;
+  const hargaKamar = roomType === 'ac'  ? 200000 : 150000;
   const biayaExtra = extraKasur ? 35000 : 0;
 
   useEffect(() => {

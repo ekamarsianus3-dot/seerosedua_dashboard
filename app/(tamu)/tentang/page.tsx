@@ -4,25 +4,22 @@ import Link from 'next/link';
 
 export default function TentangPage() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       
-      {/* NAVBAR - Konsisten dengan HomePage */}
+      {/* --- PERUBAHAN 1: Header (Navbar) ditambahkan agar memiliki warna yang sama dengan footer --- */}
       <nav className="bg-blue-950 z-50 border-b border-blue-900 shadow-sm">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <Link href="/" className="text-xl font-bold tracking-wider text-white">
             PENGINAPAN SEE ROSE II
           </Link>
-          <div className="hidden md:flex items-center gap-4">
-            <Link href="/" className="text-blue-100 hover:text-white font-semibold transition">Beranda</Link>
-          </div>
+          <Link href="/" className="text-blue-100 hover:text-white font-semibold transition">Beranda</Link>
         </div>
       </nav>
 
-      {/* CONTENT */}
-      <main className="flex-1 max-w-4xl mx-auto py-12 px-4">
-        <h1 className="text-3xl font-bold mb-6 text-center text-blue-950">Tentang Penginapan Seerosedua</h1>
+      <main className="flex-1 max-w-4xl mx-auto py-12 px-4 text-gray-800">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Tentang Penginapan Seerosedua</h1>
         
-        <div className="prose max-w-none bg-white p-6 rounded-2xl border mb-8 shadow-sm">
+        <div className="prose max-w-none bg-gray-50 p-6 rounded-2xl border mb-8">
           <h2 className="text-xl font-bold mb-3 text-slate-800">Aturan & Tata Tertib Penginapan</h2>
           <ul className="list-disc pl-5 space-y-2 text-gray-700">
             <li>Waktu <strong>Check-In</strong> dimulai pukul 12:00 WIB.</li>
@@ -55,7 +52,7 @@ export default function TentangPage() {
         </div>
       </main>
 
-      {/* FOOTER - Konsisten dengan HomePage */}
+      {/* --- PERUBAHAN 2: Footer disesuaikan warnanya menjadi bg-blue-950 --- */}
       <footer className="bg-blue-950 text-gray-400 py-8 text-sm text-center border-t border-blue-900">
         <p>© 2026 PENGINAPAN SEE ROSE II. Hak Cipta Dilindungi.</p>
       </footer>
