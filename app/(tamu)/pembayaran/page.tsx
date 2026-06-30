@@ -104,7 +104,7 @@ export default function PembayaranPage() {
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2 text-sm text-blue-900">
           <p className="font-bold text-base">🏧 Instruksi Transfer Bank:</p>
           <p>Silakan transfer tepat sesuai total tagihan ke rekening berikut:</p>
-          <p><strong>Bank BCA:</strong> 1234567890 a/n SEEROSEDUA HOTEL</p>
+          <p><strong>Bank BCA:</strong> 1234567890 a/n SEEROSEDUA HOTELllllll</p>
           <p><strong>Bank Mandiri:</strong> 9876543210 a/n SEEROSEDUA HOTEL</p>
         </div>
       )}
