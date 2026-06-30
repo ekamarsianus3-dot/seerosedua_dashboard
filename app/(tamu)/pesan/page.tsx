@@ -64,7 +64,7 @@ function BookingFormContent() {
             className="w-full p-3 border rounded-xl bg-white"
           >
             <option value="ac">Kamar Tipe AC — Rp 200.000 / malam</option>
-            <option value="kipas">Kamar Kipas Angin — Rp 100.000 / malam</option>
+            <option value="kipas">Kamar Kipas Angin — Rp 150.000 / malam</option>
           </select>
         </div>
 
