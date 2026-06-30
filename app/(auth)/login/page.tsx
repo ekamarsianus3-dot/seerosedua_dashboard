@@ -81,7 +81,7 @@ export default function LoginPage() {
         
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="text-xs font-bold text-gray-700 uppercase block mb-1">Email</label>
+            <label className="text-xs font-bold text-gray-700 uppercase block mb-1"> Email</label>
             <input 
               type="email" 
               required 
@@ -94,7 +94,7 @@ export default function LoginPage() {
 
           <div>
             <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-gray-700 uppercase">Password</label>
+                <label className="text-xs font-bold text-gray-700 uppercase"> Password</label>
                 <Link href="/forgot-password" className="text-xs font-bold text-blue-600 hover:underline">
                     Lupa password?
                 </Link>
@@ -107,7 +107,7 @@ export default function LoginPage() {
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
                 className="w-full p-2.5 pr-11 border border-gray-200 rounded-xl text-sm" 
-                placeholder="Password" 
+                placeholder="Masukan Password" 
               />
               <button
                 type="button"

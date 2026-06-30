@@ -62,15 +62,15 @@ export default function RegisterPage() {
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
             <label className="text-xs font-bold text-gray-700 uppercase block mb-1">Nama Lengkap</label>
-            <input type="text" required value={formData.nama} onChange={(e) => setFormData({...formData, nama: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl text-sm text-black" placeholder="Nama Anda" />
+            <input type="text" required value={formData.nama} onChange={(e) => setFormData({...formData, nama: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl text-sm text-black" placeholder="Masukan Nama Anda" />
           </div>
           <div>
             <label className="text-xs font-bold text-gray-700 uppercase block mb-1">Email</label>
-            <input type="email" required value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl text-sm text-black" placeholder="nama@email.com" />
+            <input type="email" required value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl text-sm text-black" placeholder="Masukan Email Anda" />
           </div>
           <div>
             <label className="text-xs font-bold text-gray-700 uppercase block mb-1">No. HP</label>
-            <input type="text" required value={formData.no_hp} onChange={(e) => setFormData({...formData, no_hp: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl text-sm text-black" placeholder="081234567890" />
+            <input type="text" required value={formData.no_hp} onChange={(e) => setFormData({...formData, no_hp: e.target.value})} className="w-full p-3 border border-gray-300 rounded-xl text-sm text-black" placeholder="Masukan No Hp Anda" />
           </div>
           <div>
             <label className="text-xs font-bold text-gray-700 uppercase block mb-1">Alamat</label>
@@ -86,7 +86,7 @@ export default function RegisterPage() {
                 value={formData.password} 
                 onChange={(e) => setFormData({...formData, password: e.target.value})} 
                 className="w-full p-3 pr-11 border border-gray-300 rounded-xl text-sm text-black" 
-                placeholder="••••••••" 
+                placeholder="Masukan Password" 
               />
               <button
                 type="button"
