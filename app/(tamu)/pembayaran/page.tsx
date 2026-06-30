@@ -22,7 +22,7 @@ export default function PembayaranPage() {
   if (!tx) return <div className="text-center p-10 text-black">Memuat data...</div>;
 
   const handleKonfirmasiBayar = async () => {
-    // 1. Validasi Input (Tanpa input no rekening tamu)
+    // 1. Validasi Input
     if (!tx.nama || tx.nama.trim() === '') return alert('Nama tidak boleh kosong!');
     if (!tx.no_hp || tx.no_hp.trim() === '') return alert('No. HP tidak boleh kosong!');
 
@@ -57,7 +57,7 @@ export default function PembayaranPage() {
         .single();
       if (bookingError) throw bookingError;
 
-      // 4. Insert ke Payments (Tanpa no_rekening_pengirim)
+      // 4. Insert ke Payments
       const { error: paymentError } = await supabase
         .from('payments')
         .insert([{
