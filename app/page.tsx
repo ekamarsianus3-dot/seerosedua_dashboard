@@ -31,10 +31,10 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans flex flex-col">
       
-      {/* NAVBAR (Header konsisten dengan warna footer: bg-blue-950) */}
-      <nav className="sticky top-0 left-0 right-0 bg-blue-950/95 backdrop-blur-md z-50 border-b border-blue-900 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
-          <Link href="/" className="text-2xl font-black tracking-wider text-white hover:text-blue-200 transition">
+      {/* NAVBAR */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md z-50 border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <Link href="/" className="text-xl font-bold tracking-wider text-blue-600">
             {hotelName}
           </Link>
           
@@ -44,33 +44,24 @@ export default function HomePage() {
               <span className="text-sm text-gray-400 animate-pulse">Memeriksa sesi...</span>
             ) : user ? (
               /* Jika Sudah Login */
-              <div className="flex items-center gap-4">
-                {/* Tombol Riwayat Pesanan Saya */}
-                <Link 
-                  href="/pembayaran/riwayat" 
-                  className="px-5 py-2.5 rounded-xl bg-amber-500 text-blue-950 text-sm font-bold hover:bg-amber-400 transition shadow-md"
-                >
-                  Riwayat Pesanan Saya
-                </Link>
-                <Link 
-                  href="/kamar" 
-                  className="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-bold hover:bg-green-700 transition shadow-md"
-                >
-                  Area Tamu (Pesan Kamar)
-                </Link>
-              </div>
+              <Link 
+                href="/kamar" 
+                className="px-5 py-2.5 rounded-xl bg-green-600 text-white text-sm font-semibold hover:bg-green-700 transition shadow-md"
+              >
+                Area Tamu (Pesan Kamar)
+              </Link>
             ) : (
               /* Jika Belum Login */
               <>
                 <Link 
                   href="/login" 
-                  className="px-5 py-2.5 rounded-xl border border-white/20 text-white text-sm font-semibold hover:bg-white/10 transition"
+                  className="px-5 py-2.5 rounded-xl border border-gray-300 text-sm font-semibold hover:bg-gray-50 transition text-black"
                 >
                   Masuk Tamu
                 </Link>
                 <Link 
                   href="/register" 
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-500 transition shadow-md"
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition shadow-md"
                 >
                   Daftar Sekarang
                 </Link>
@@ -79,7 +70,7 @@ export default function HomePage() {
           </div>
 
           {/* Mobile Hamburger */}
-          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 text-white">
+          <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden p-2 text-gray-600">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
             </svg>
@@ -88,16 +79,13 @@ export default function HomePage() {
 
         {/* Mobile Dropdown */}
         {menuOpen && (
-          <div className="md:hidden bg-blue-950 border-t border-blue-900 px-6 py-4 flex flex-col gap-3 shadow-lg">
+          <div className="md:hidden bg-white border-b px-6 py-4 flex flex-col gap-3 shadow-lg">
             {user ? (
-              <>
-                <Link href="/pembayaran/riwayat" onClick={() => setMenuOpen(false)} className="text-amber-400 font-bold py-1">Riwayat Pesanan Saya</Link>
-                <Link href="/kamar" onClick={() => setMenuOpen(false)} className="text-green-400 font-bold py-1">Area Tamu (Pesan Kamar)</Link>
-              </>
+              <Link href="/kamar" onClick={() => setMenuOpen(false)} className="text-green-600 font-semibold py-1">Area Tamu (Pesan Kamar)</Link>
             ) : (
               <>
-                <Link href="/login" onClick={() => setMenuOpen(false)} className="text-white font-medium py-1">Masuk Tamu</Link>
-                <Link href="/register" onClick={() => setMenuOpen(false)} className="text-blue-400 font-medium py-1">Daftar Sekarang</Link>
+                <Link href="/login" onClick={() => setMenuOpen(false)} className="text-blue-600 font-medium py-1">Masuk Tamu</Link>
+                <Link href="/register" onClick={() => setMenuOpen(false)} className="text-blue-600 font-medium py-1">Daftar Sekarang</Link>
               </>
             )}
           </div>
@@ -106,27 +94,25 @@ export default function HomePage() {
 
       {/* HERO SECTION */}
       <header 
-        className="relative pt-24 pb-16 min-h-[75vh] flex items-center justify-center bg-cover bg-center text-white text-center"
+        className="relative pt-20 h-[80vh] flex items-center justify-center bg-cover bg-center text-white"
         style={{ 
-          backgroundImage: `linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('/images/login-bg.jpg')` 
+          backgroundImage: `linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url('/images/login-bg.jpg')` 
         }}
       >
-        <div className="max-w-4xl mx-auto px-6 space-y-6">
-          <span className="px-4 py-1.5 rounded-full bg-blue-600/30 border border-blue-500/50 text-blue-300 text-xs font-bold tracking-widest uppercase">
-            Selamat Datang di {hotelName}
-          </span>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto text-center px-6 space-y-6">
+          <p className="text-sm font-bold tracking-widest uppercase text-blue-400">Selamat Datang di {hotelName}</p>
+          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
             Temukan Kenyamanan Menginap Terbaik
           </h1>
-          <p className="text-lg text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-lg text-gray-200 max-w-2xl mx-auto font-light">
             Penginapan bersih, aman, dan berlokasi strategis untuk kebutuhan istirahat Anda.
           </p>
-          <div className="pt-6">
+          <div className="pt-4">
             {/* Tombol Utama Dinamis */}
             <Link 
               href={user ? "/kamar" : "/login"} 
-              className={`inline-block font-extrabold px-10 py-5 rounded-2xl shadow-2xl transition transform hover:-translate-y-1 active:scale-95 text-lg ${
-                user ? 'bg-green-600 hover:bg-green-700 text-white shadow-green-900/40' : 'bg-amber-500 hover:bg-amber-400 text-blue-950 shadow-amber-900/30'
+              className={`inline-block font-bold px-8 py-4 rounded-2xl shadow-lg transition transform hover:-translate-y-0.5 ${
+                user ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-amber-500 hover:bg-amber-600 text-blue-950'
               }`}
             >
               {user ? "Lihat Katalog & Pesan Kamar" : "Lihat & Pesan Kamar Sekarang"}
@@ -136,47 +122,26 @@ export default function HomePage() {
       </header>
 
       {/* DETAIL INFO & FASILITAS */}
-      <section className="py-24 bg-white max-w-7xl mx-auto px-6 w-full flex-1">
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          <div className="space-y-6">
-            <h2 className="text-3xl md:text-4xl font-black text-blue-950 tracking-tight">
-              Tentang Penginapan Kami
-            </h2>
-            <p className="text-gray-600 leading-relaxed text-lg font-light">
+      <section className="py-20 max-w-7xl mx-auto px-6 flex-1">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-3xl font-bold text-blue-950 mb-6">Tentang Penginapan Kami</h2>
+            <p className="text-gray-600 leading-relaxed mb-4">
               Kami berkomitmen menyajikan pengalaman menginap yang nyaman dan praktis tanpa menguras kantong Anda. Setiap unit kamar kami dirawat secara berkala demi menjaga kebersihan standar hotel.
             </p>
-            <div className="border-l-4 border-blue-600 pl-4 py-2">
-              <p className="text-sm font-semibold text-gray-700 italic">"Istirahat berkualitas, perjalanan jadi lebih puas."</p>
-            </div>
           </div>
-          <div className="bg-gray-50 p-10 rounded-3xl border border-gray-100 shadow-sm grid grid-cols-2 gap-8">
-            <div className="space-y-2">
-              <div className="text-4xl">⚡</div>
-              <h4 className="font-bold text-gray-800">Wi-Fi Cepat</h4>
-              <p className="text-xs text-gray-500">Koneksi internet tanpa batas untuk keperluan Anda.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl">🅿️</div>
-              <h4 className="font-bold text-gray-800">Parkir Luas</h4>
-              <p className="text-xs text-gray-500">Area parkir aman, luas, dan nyaman untuk kendaraan.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl">❄️</div>
-              <h4 className="font-bold text-gray-800">AC & Kipas</h4>
-              <p className="text-xs text-gray-500">Pilihan pendingin ruangan untuk kenyamanan istirahat.</p>
-            </div>
-            <div className="space-y-2">
-              <div className="text-4xl">🔑</div>
-              <h4 className="font-bold text-gray-800">24 Jam</h4>
-              <p className="text-xs text-gray-500">Layanan dan akses resepsionis yang selalu siap sedia.</p>
-            </div>
+          <div className="bg-white p-8 rounded-2xl shadow-md border border-gray-100 grid grid-cols-2 gap-6">
+            <div className="space-y-1"><div className="text-2xl">⚡</div><h4 className="font-bold text-gray-800 text-sm">Wi-Fi Cepat</h4></div>
+            <div className="space-y-1"><div className="text-2xl">🅿️</div><h4 className="font-bold text-gray-800 text-sm">Parkir Luas</h4></div>
+            <div className="space-y-1"><div className="text-2xl">❄️</div><h4 className="font-bold text-gray-800 text-sm">AC & kipas Angin</h4></div>
+            <div className="space-y-1"><div className="text-2xl">🔑</div><h4 className="font-bold text-gray-800 text-sm">Resepsionis 24 Jam</h4></div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER (Konsisten dengan warna navbar: bg-blue-950) */}
-      <footer className="bg-blue-950 text-gray-300 py-12 text-sm text-center border-t border-blue-900/50">
-        <p className="font-medium tracking-wide">© 2026 {hotelName}. Hak Cipta Dilindungi.</p>
+      {/* FOOTER */}
+      <footer className="bg-blue-950 text-gray-400 py-8 text-sm text-center border-t border-blue-900">
+        <p>© 2026 {hotelName}. Hak Cipta Dilindungi.</p>
       </footer>
     </div>
   );

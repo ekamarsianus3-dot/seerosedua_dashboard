@@ -11,17 +11,18 @@ export default function RiwayatPembayaranPage() {
   const fetchRiwayat = async () => {
     setLoading(true);
     
-    // 1. Ambil data user yang sedang login
+    // 1. Dapatkan user yang sedang login
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      console.log("User belum login");
+      console.warn("User belum login");
       setLoading(false);
       return;
     }
 
-    // 2. Ambil data dari tabel bookings
-    // Pastikan user_id di database sudah diisi untuk data-data tersebut
+    console.log("Mencari riwayat untuk User ID:", user.id);
+
+    // 2. Ambil data dengan filter user_id
     const { data, error } = await supabase
       .from('bookings')
       .select(`
@@ -33,13 +34,13 @@ export default function RiwayatPembayaranPage() {
         guests (nama, no_hp),
         payments (metode, status)
       `)
-      .eq('user_id', user.id) // Filter berdasarkan user yang login
+      .eq('user_id', user.id) 
       .order('created_at', { ascending: false });
 
     if (error) {
-      console.error("Error database:", error.message);
+      console.error("Error saat mengambil data:", error.message);
     } else {
-      console.log("Data berhasil diambil:", data);
+      console.log("Data ditemukan:", data);
       setBookings(data || []);
     }
     
@@ -51,26 +52,31 @@ export default function RiwayatPembayaranPage() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 text-black">
+    <div className="max-w-4xl mx-auto py-12 px-4 text-slate-800">
       <h2 className="text-3xl font-bold mb-8 text-center">Riwayat Pemesanan Saya</h2>
 
       {loading ? (
-        <div className="text-center py-10">Memuat data...</div>
+        <div className="text-center py-10">Memuat riwayat...</div>
       ) : bookings.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 border rounded-2xl">
-          <p className="text-gray-500">Belum ada riwayat pemesanan untuk akun ini.</p>
-          <Link href="/" className="text-blue-600 font-semibold block mt-4 hover:underline">Kembali ke Beranda</Link>
+        <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-3xl">
+          <p className="text-gray-500">Belum ada data pemesanan yang terhubung dengan akun ini.</p>
+          <Link href="/kamar" className="text-blue-600 font-semibold mt-4 block hover:underline">
+            Cari & Pesan Kamar
+          </Link>
         </div>
       ) : (
         <div className="space-y-4">
           {bookings.map((b) => (
-            <div key={b.id} className="bg-white border rounded-2xl p-6 shadow-sm">
-              <div className="flex justify-between items-start">
+            <div key={b.id} className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm hover:shadow-md transition">
+              <div className="flex justify-between items-center">
                 <div>
                   <h4 className="text-lg font-bold">{b.guests?.nama || 'Tamu'}</h4>
                   <p className="text-sm text-gray-500">Durasi: {b.lama_menginap} Malam</p>
+                  <p className="text-xs text-blue-500 mt-1 uppercase font-bold">{b.status}</p>
                 </div>
-                <p className="font-extrabold text-blue-600">Rp {b.total_harga?.toLocaleString('id-ID')}</p>
+                <div className="text-right">
+                  <p className="font-extrabold text-blue-700 text-lg">Rp {b.total_harga?.toLocaleString('id-ID')}</p>
+                </div>
               </div>
             </div>
           ))}
