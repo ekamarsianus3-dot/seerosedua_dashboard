@@ -8,7 +8,6 @@ export default function PembayaranPage() {
   const router = useRouter();
   const [tx, setTx] = useState<any>(null);
   const [metode, setMetode] = useState('Transfer Bank');
-  const [noRekening, setNoRekening] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -23,12 +22,9 @@ export default function PembayaranPage() {
   if (!tx) return <div className="text-center p-10 text-black">Memuat data...</div>;
 
   const handleKonfirmasiBayar = async () => {
-    // 1. Validasi Input
+    // 1. Validasi Input (Tanpa input no rekening tamu)
     if (!tx.nama || tx.nama.trim() === '') return alert('Nama tidak boleh kosong!');
     if (!tx.no_hp || tx.no_hp.trim() === '') return alert('No. HP tidak boleh kosong!');
-    if (metode === 'Transfer Bank' && (!noRekening || noRekening.trim() === '')) {
-      return alert('Mohon masukkan nomor rekening/referensi bank Anda!');
-    }
 
     setLoading(true);
     try {
@@ -61,13 +57,12 @@ export default function PembayaranPage() {
         .single();
       if (bookingError) throw bookingError;
 
-      // 4. Insert ke Payments
+      // 4. Insert ke Payments (Tanpa no_rekening_pengirim)
       const { error: paymentError } = await supabase
         .from('payments')
         .insert([{
           booking_id: bookingData.id,
           metode: metode,
-          no_rekening_pengirim: noRekening,
           jumlah: tx.totalHarga,
           status: 'menunggu'
         }]);
@@ -113,7 +108,7 @@ export default function PembayaranPage() {
           <option value="Virtual Account">Virtual Account</option>
         </select>
 
-        {/* Informasi Rekening */}
+        {/* Informasi Rekening (Hanya muncul jika Transfer Bank) */}
         {metode === 'Transfer Bank' && (
           <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl text-sm text-blue-800 space-y-1">
             <p className="font-bold">Informasi Transfer Bank:</p>
@@ -121,16 +116,6 @@ export default function PembayaranPage() {
             <p className="font-mono font-bold text-base">BRI: 481001015533502</p>
             <p>a/n Beregita Rosiana Munthe</p>
           </div>
-        )}
-
-        {metode === 'Transfer Bank' && (
-          <input 
-            type="text" 
-            value={noRekening}
-            onChange={(e) => setNoRekening(e.target.value)}
-            className="w-full p-3 border rounded-xl"
-            placeholder="Masukkan No. Rekening / Nama Bank Pengirim"
-          />
         )}
       </div>
 

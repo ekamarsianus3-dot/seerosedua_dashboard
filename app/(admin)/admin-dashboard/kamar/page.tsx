@@ -32,19 +32,20 @@ export default function KelolaKamarPage() {
     let uploadedUrls = [];
 
     try {
-      // 1. Unggah 3 foto ke Supabase Storage 'room-images' (DIUBAH DISINI)
+      // 1. Unggah 3 foto ke Supabase Storage 'room-images'
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${i}.${fileExt}`;
+        // Menggunakan timestamp agar nama file selalu unik
+        const fileName = `kamar/${Date.now()}_${i}.${fileExt}`;
         
         const { error: uploadError } = await supabase.storage
-          .from('room-images') // <--- SUDAH DIGANTI
-          .upload(`kamar/${fileName}`, file);
+          .from('room-images') // Pastikan nama bucket di dashboard sama persis
+          .upload(fileName, file);
         
         if (uploadError) throw uploadError;
         
-        const { data } = supabase.storage.from('room-images').getPublicUrl(`kamar/${fileName}`); // <--- SUDAH DIGANTI
+        const { data } = supabase.storage.from('room-images').getPublicUrl(fileName);
         uploadedUrls.push(data.publicUrl);
       }
 
