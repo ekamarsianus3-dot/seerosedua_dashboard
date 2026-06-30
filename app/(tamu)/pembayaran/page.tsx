@@ -113,6 +113,16 @@ export default function PembayaranPage() {
           <option value="Virtual Account">Virtual Account</option>
         </select>
 
+        {/* Informasi Rekening */}
+        {metode === 'Transfer Bank' && (
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-xl text-sm text-blue-800 space-y-1">
+            <p className="font-bold">Informasi Transfer Bank:</p>
+            <p>Silakan transfer ke rekening berikut:</p>
+            <p className="font-mono font-bold text-base">BRI: 481001015533502</p>
+            <p>a/n Beregita Rosiana Munthe</p>
+          </div>
+        )}
+
         {metode === 'Transfer Bank' && (
           <input 
             type="text" 

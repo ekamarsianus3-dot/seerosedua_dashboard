@@ -7,7 +7,6 @@ export default function KelolaKamarPage() {
   const [roomTypes, setRoomTypes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // State form
   const [namaTipe, setNamaTipe] = useState('');
   const [harga, setHarga] = useState(0);
   const [kapasitas, setKapasitas] = useState(2);
@@ -33,19 +32,19 @@ export default function KelolaKamarPage() {
     let uploadedUrls = [];
 
     try {
-      // 1. Unggah 3 foto ke Supabase Storage 'images'
+      // 1. Unggah 3 foto ke Supabase Storage 'room-images' (DIUBAH DISINI)
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}_${i}.${fileExt}`;
         
         const { error: uploadError } = await supabase.storage
-          .from('images')
+          .from('room-images') // <--- SUDAH DIGANTI
           .upload(`kamar/${fileName}`, file);
         
         if (uploadError) throw uploadError;
         
-        const { data } = supabase.storage.from('images').getPublicUrl(`kamar/${fileName}`);
+        const { data } = supabase.storage.from('room-images').getPublicUrl(`kamar/${fileName}`); // <--- SUDAH DIGANTI
         uploadedUrls.push(data.publicUrl);
       }
 
@@ -55,13 +54,13 @@ export default function KelolaKamarPage() {
         harga,
         kapasitas,
         fasilitas,
-        gambar: JSON.stringify(uploadedUrls) // Simpan array sebagai JSON string
+        gambar: JSON.stringify(uploadedUrls)
       }]);
 
       if (error) throw error;
 
       alert('Kamar berhasil ditambahkan!');
-      setNamaTipe(''); setHarga(0); setFasilitas('');
+      setNamaTipe(''); setHarga(0); setFasilitas(''); setFiles(null);
       fetchRooms();
     } catch (err: any) {
       alert('Gagal: ' + err.message);
@@ -82,7 +81,6 @@ export default function KelolaKamarPage() {
     <div className="p-6 text-black">
       <h1 className="text-2xl font-bold mb-6">📂 Kelola Tipe Kamar</h1>
       
-      {/* Form Tambah Kamar */}
       <div className="bg-white p-6 rounded-xl shadow-sm border mb-8">
         <form onSubmit={handleTambahKamar} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input type="text" placeholder="Nama Tipe Kamar" value={namaTipe} onChange={(e) => setNamaTipe(e.target.value)} className="p-3 border rounded-xl" required />
@@ -101,7 +99,6 @@ export default function KelolaKamarPage() {
         </form>
       </div>
 
-      {/* Tabel */}
       <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
         <table className="w-full text-left">
           <thead className="bg-gray-50 border-b">
