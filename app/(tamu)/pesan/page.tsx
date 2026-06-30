@@ -2,9 +2,8 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 
-// 1. Komponen Utama Formulir
+// Komponen Utama Formulir
 function BookingFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,7 +17,7 @@ function BookingFormContent() {
   const [detailTamu, setDetailTamu] = useState({ nama: '', no_hp: '', alamat: '' });
   const [totalHarga, setTotalHarga] = useState(0);
 
-  const hargaKamar = roomType === 'ac'  ? 200000 : 150000;
+  const hargaKamar = roomType === 'ac' ? 200000 : 150000;
   const biayaExtra = extraKasur ? 35000 : 0;
 
   useEffect(() => {
@@ -128,30 +127,13 @@ function BookingFormContent() {
   );
 }
 
-// 2. Export dengan Header & Footer Konsisten
+// Export utama yang hanya memuat konten tanpa Nav/Footer tambahan
 export default function BookingPage() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* NAVBAR */}
-      <nav className="bg-blue-950 z-50 border-b border-blue-900 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold tracking-wider text-white">
-            PENGINAPAN SEE ROSE II
-          </Link>
-          <Link href="/" className="text-blue-100 hover:text-white font-semibold transition">Beranda</Link>
-        </div>
-      </nav>
-
-      <main className="flex-1">
-        <Suspense fallback={<div className="text-center py-20 text-gray-500">Memuat data formulir...</div>}>
-          <BookingFormContent />
-        </Suspense>
-      </main>
-
-      {/* FOOTER */}
-      <footer className="bg-blue-950 text-gray-400 py-8 text-sm text-center border-t border-blue-900">
-        <p>© 2026 PENGINAPAN SEE ROSE IIi. Hak Cipta Dilindungi.</p>
-      </footer>
-    </div>
+    <main className="min-h-screen bg-gray-50 pt-10">
+      <Suspense fallback={<div className="text-center py-20 text-gray-500">Memuat data formulir...</div>}>
+        <BookingFormContent />
+      </Suspense>
+    </main>
   );
 }

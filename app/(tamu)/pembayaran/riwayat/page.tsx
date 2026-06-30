@@ -3,72 +3,54 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
-export default function RiwayatPembayaranPage() {
-  const [bookings, setBookings] = useState<any[]>([]);
+export default function RiwayatPage() {
+  const [riwayat, setRiwayat] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchRiwayat = async () => {
-    setLoading(true);
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      setLoading(false);
-      return;
+  useEffect(() => {
+    async function loadRiwayat() {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        // Mengambil data yang hanya milik user yang sedang login
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('*, guests(nama)') // Mengambil data tamu terkait jika diperlukan
+          .eq('user_id', user.id)    // Filter berdasarkan user_id
+          .order('id', { ascending: false }); // Pesanan terbaru di atas
+
+        if (error) throw error;
+        if (data) setRiwayat(data);
+      } catch (err) {
+        console.error("Gagal memuat riwayat:", err);
+      } finally {
+        setLoading(false);
+      }
     }
-
-    // Mengambil status booking yang sudah diupdate oleh admin
-    const { data, error } = await supabase
-      .from('bookings')
-      .select(`
-        id, lama_menginap, total_harga, status, created_at,
-        guests (nama)
-      `)
-      .eq('user_id', user.id) 
-      .order('created_at', { ascending: false });
-
-    if (error) console.error("Error:", error.message);
-    else setBookings(data || []);
-    setLoading(false);
-  };
-
-  useEffect(() => { fetchRiwayat(); }, []);
-
-  // Fungsi untuk memberi warna pada label status
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'confirmed': return 'bg-green-100 text-green-700 border-green-200';
-      case 'pending': return 'bg-amber-100 text-amber-700 border-amber-200';
-      case 'cancelled': return 'bg-red-100 text-red-700 border-red-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
-  };
+    loadRiwayat();
+  }, []);
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 text-slate-800">
-      <h2 className="text-3xl font-bold mb-8 text-center">Riwayat Pemesanan</h2>
-      {loading ? <div className="text-center">Memuat...</div> : 
-       bookings.length === 0 ? (
-        <div className="text-center py-10 bg-gray-50 rounded-2xl">Tidak ada riwayat.</div>
+    <div className="max-w-4xl mx-auto py-12 px-4 text-black">
+      <h1 className="text-2xl font-bold mb-6">Riwayat Pemesanan Anda</h1>
+      
+      {loading ? (
+        <p>Memuat riwayat...</p>
+      ) : riwayat.length === 0 ? (
+        <p>Belum ada riwayat pemesanan. Silakan lakukan pemesanan terlebih dahulu.</p>
       ) : (
         <div className="space-y-4">
-          {bookings.map((b) => (
-            <div key={b.id} className="bg-white border p-6 rounded-2xl shadow-sm flex justify-between items-center">
-              <div>
-                <h4 className="font-bold text-lg">{b.guests?.nama}</h4>
-                <p className="text-sm text-gray-500">Durasi: {b.lama_menginap} Malam</p>
-                
-                {/* Menampilkan Status Konfirmasi Admin */}
-                <div className="mt-3">
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusBadge(b.status)}`}>
-                    Status: {b.status === 'pending' ? 'Menunggu Konfirmasi' : b.status.toUpperCase()}
-                  </span>
-                </div>
+          {riwayat.map((item) => (
+            <div key={item.id} className="p-5 border rounded-2xl shadow-sm bg-white border-gray-200">
+              <div className="flex justify-between items-center">
+                <p className="font-bold">ID Booking: {item.id}</p>
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold uppercase">
+                  {item.status}
+                </span>
               </div>
-              
-              <div className="text-right">
-                <p className="text-sm text-gray-400">Total Tagihan</p>
-                <p className="font-bold text-blue-600 text-lg">Rp {b.total_harga.toLocaleString('id-ID')}</p>
-              </div>
+              <p className="text-gray-600 mt-2">Total Pembayaran: Rp {item.total_harga.toLocaleString('id-ID')}</p>
+              <p className="text-sm text-gray-500">Tanggal: {new Date(item.created_at).toLocaleDateString()}</p>
             </div>
           ))}
         </div>
