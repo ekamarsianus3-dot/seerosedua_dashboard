@@ -24,9 +24,11 @@ export default function PembayaranPage() {
   const handleKonfirmasiBayar = async () => {
     setLoading(true);
     try {
-      // 1. Dapatkan user yang sedang login
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Anda harus login untuk melakukan pemesanan.");
+      // 1. Ambil data user yang sedang login
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        throw new Error("Anda harus login untuk melakukan pemesanan.");
+      }
 
       // 2. Catat ke tabel guests
       const { data: guestData, error: guestError } = await supabase
@@ -39,11 +41,12 @@ export default function PembayaranPage() {
 
       const roomTypeId = tx.roomType === 'Kamar Tipe AC' ? 1 : 2;
 
-      // 3. Catat ke tabel bookings (dengan user_id)
+      // 3. Catat ke tabel bookings
+      // user_id diambil dari user.id agar riwayat bisa tampil di halaman riwayat
       const { data: bookingData, error: bookingError } = await supabase
         .from('bookings')
         .insert([{
-          user_id: user.id, // Menghubungkan pesanan ke akun user
+          user_id: user.id, 
           guest_id: guestData.id,
           room_type_id: roomTypeId,
           lama_menginap: tx.lamaMenginap,
@@ -70,10 +73,11 @@ export default function PembayaranPage() {
 
       if (paymentError) throw paymentError;
 
-      alert('Pemesanan sukses! Ringkasan & instruksi pembayaran berhasil dicatat.');
+      alert('Pemesanan sukses!');
       sessionStorage.removeItem('temp_booking');
       router.push('/riwayat'); // Arahkan ke halaman riwayat
     } catch (err: any) {
+      console.error(err);
       alert('Terjadi kesalahan: ' + err.message);
     } finally {
       setLoading(false);
