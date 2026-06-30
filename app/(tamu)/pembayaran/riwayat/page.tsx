@@ -13,12 +13,11 @@ export default function RiwayatPage() {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
-        // Mengambil data yang hanya milik user yang sedang login
         const { data, error } = await supabase
           .from('bookings')
-          .select('*, guests(nama)') // Mengambil data tamu terkait jika diperlukan
-          .eq('user_id', user.id)    // Filter berdasarkan user_id
-          .order('id', { ascending: false }); // Pesanan terbaru di atas
+          .select('*, guests(nama)') 
+          .eq('user_id', user.id)
+          .order('id', { ascending: false });
 
         if (error) throw error;
         if (data) setRiwayat(data);
@@ -32,25 +31,43 @@ export default function RiwayatPage() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto py-12 px-4 text-black">
-      <h1 className="text-2xl font-bold mb-6">Riwayat Pemesanan Anda</h1>
+    <div className="max-w-3xl mx-auto py-12 px-6 text-slate-800">
+      <h1 className="text-3xl font-extrabold mb-8 text-slate-900 tracking-tight">Riwayat Pemesanan</h1>
       
       {loading ? (
-        <p>Memuat riwayat...</p>
+        <div className="text-center py-10 text-slate-500">Memuat riwayat Anda...</div>
       ) : riwayat.length === 0 ? (
-        <p>Belum ada riwayat pemesanan. Silakan lakukan pemesanan terlebih dahulu.</p>
+        <div className="text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+          <p className="text-slate-600">Belum ada riwayat pesanan yang ditemukan.</p>
+        </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {riwayat.map((item) => (
-            <div key={item.id} className="p-5 border rounded-2xl shadow-sm bg-white border-gray-200">
-              <div className="flex justify-between items-center">
-                <p className="font-bold">ID Booking: {item.id}</p>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold uppercase">
+            <div key={item.id} className="group p-6 bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300">
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-slate-900">
+                    {item.guests?.nama || 'Tamu Tidak Dikenal'}
+                  </h3>
+                  <p className="text-sm text-slate-400 mt-0.5">
+                    {new Date(item.created_at).toLocaleDateString('id-ID', { 
+                      day: 'numeric', month: 'long', year: 'numeric' 
+                    })}
+                  </p>
+                </div>
+                <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider
+                  ${item.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700' : 
+                    item.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}`}>
                   {item.status}
                 </span>
               </div>
-              <p className="text-gray-600 mt-2">Total Pembayaran: Rp {item.total_harga.toLocaleString('id-ID')}</p>
-              <p className="text-sm text-gray-500">Tanggal: {new Date(item.created_at).toLocaleDateString()}</p>
+              
+              <div className="flex justify-between items-center pt-4 border-t border-slate-100">
+                <p className="text-slate-600 font-medium">Total Pembayaran</p>
+                <p className="text-lg font-bold text-blue-600">
+                  Rp {item.total_harga.toLocaleString('id-ID')}
+                </p>
+              </div>
             </div>
           ))}
         </div>
