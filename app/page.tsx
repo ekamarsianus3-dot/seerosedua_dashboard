@@ -115,7 +115,7 @@ export default function HomePage() {
                 user ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-amber-500 hover:bg-amber-600 text-blue-950'
               }`}
             >
-              {user ? "Lihat Katalog & Pesan Kamar" : "Pesan Kamar"}
+              {user ? "Pesan Kamar" : "Pesan Kamar"}
             </Link>
           </div>
         </div>
