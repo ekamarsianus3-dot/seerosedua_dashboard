@@ -3,7 +3,6 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-// Komponen Utama Formulir
 function BookingFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -13,6 +12,7 @@ function BookingFormContent() {
   const [roomType, setRoomType] = useState<'ac' | 'kipas'>('ac');
   const [lamaMenginap, setLamaMenginap] = useState(1);
   const [extraKasur, setExtraKasur] = useState(false);
+  const [tanggalCheckIn, setTanggalCheckIn] = useState(''); 
   
   const [detailTamu, setDetailTamu] = useState({ nama: '', no_hp: '', alamat: '' });
   const [totalHarga, setTotalHarga] = useState(0);
@@ -37,6 +37,7 @@ function BookingFormContent() {
     
     const dataTransaksi = {
       ...detailTamu,
+      tanggalCheckIn,
       roomType: roomType === 'ac' ? 'Kamar Tipe AC' : 'Kamar Kipas Angin',
       roomTypeId: roomType === 'ac' ? 1 : 2,
       lamaMenginap,
@@ -86,6 +87,16 @@ function BookingFormContent() {
         </div>
 
         <div>
+          <label className="block font-semibold mb-2 text-gray-700">Tanggal Check-In</label>
+          <input 
+            type="date" required value={tanggalCheckIn}
+            min={new Date().toISOString().split('T')[0]} 
+            onChange={(e) => setTanggalCheckIn(e.target.value)} 
+            className="w-full p-3 border rounded-xl"
+          />
+        </div>
+
+        <div>
           <label className="block font-semibold mb-2 text-gray-700">Alamat Tamu</label>
           <input 
             type="text" required value={detailTamu.alamat}
@@ -127,7 +138,6 @@ function BookingFormContent() {
   );
 }
 
-// Export utama yang hanya memuat konten tanpa Nav/Footer tambahan
 export default function BookingPage() {
   return (
     <main className="min-h-screen bg-gray-50 pt-10">

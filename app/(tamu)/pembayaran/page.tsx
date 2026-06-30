@@ -90,6 +90,7 @@ export default function PembayaranPage() {
       <div className="bg-gray-50 p-6 rounded-2xl border mb-6 space-y-3">
         <p><strong>Nama:</strong> {tx.nama}</p>
         <p><strong>No. HP:</strong> {tx.no_hp}</p>
+        <p><strong>Tanggal Check-In:</strong> {tx.tanggalCheckIn ? new Date(tx.tanggalCheckIn).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '-'}</p>
         <p><strong>Tipe Kamar:</strong> {tx.roomType}</p>
         <p><strong>Durasi:</strong> {tx.lamaMenginap} Malam</p>
         <p><strong>Fasilitas:</strong> {tx.extraKasur ? 'Ekstra Kasur (+Rp 35.000)' : 'Standar'}</p>
