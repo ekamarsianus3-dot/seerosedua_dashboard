@@ -24,7 +24,11 @@ export default function PembayaranPage() {
   const handleKonfirmasiBayar = async () => {
     setLoading(true);
     try {
-      // 1. Catat ke tabel guests
+      // 1. Dapatkan user yang sedang login
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Anda harus login untuk melakukan pemesanan.");
+
+      // 2. Catat ke tabel guests
       const { data: guestData, error: guestError } = await supabase
         .from('guests')
         .insert([{ nama: tx.nama, alamat: tx.alamat, no_hp: tx.no_hp }])
@@ -33,13 +37,13 @@ export default function PembayaranPage() {
 
       if (guestError) throw guestError;
 
-      // Amankan penentuan room_type_id berdasarkan teks dari sessionStorage
       const roomTypeId = tx.roomType === 'Kamar Tipe AC' ? 1 : 2;
 
-      // 2. Catat ke tabel bookings
+      // 3. Catat ke tabel bookings (dengan user_id)
       const { data: bookingData, error: bookingError } = await supabase
         .from('bookings')
         .insert([{
+          user_id: user.id, // Menghubungkan pesanan ke akun user
           guest_id: guestData.id,
           room_type_id: roomTypeId,
           lama_menginap: tx.lamaMenginap,
@@ -54,7 +58,7 @@ export default function PembayaranPage() {
 
       if (bookingError) throw bookingError;
 
-      // 3. Catat ke tabel payments
+      // 4. Catat ke tabel payments
       const { error: paymentError } = await supabase
         .from('payments')
         .insert([{
@@ -68,7 +72,7 @@ export default function PembayaranPage() {
 
       alert('Pemesanan sukses! Ringkasan & instruksi pembayaran berhasil dicatat.');
       sessionStorage.removeItem('temp_booking');
-      router.push('/');
+      router.push('/riwayat'); // Arahkan ke halaman riwayat
     } catch (err: any) {
       alert('Terjadi kesalahan: ' + err.message);
     } finally {
@@ -92,7 +96,6 @@ export default function PembayaranPage() {
         </div>
       </div>
 
-      {/* Tampilan Instruksi Rekening jika memilih Transfer Bank */}
       {metode === 'Transfer Bank' && (
         <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-xl space-y-2 text-sm text-blue-900">
           <p className="font-bold text-base">🏧 Instruksi Transfer Bank:</p>
