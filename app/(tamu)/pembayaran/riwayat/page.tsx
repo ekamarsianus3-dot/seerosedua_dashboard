@@ -7,22 +7,23 @@ import Link from 'next/link';
 export default function RiwayatPembayaranPage() {
   const [bookings, setBookings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Fungsi fetch diubah untuk memfilter berdasarkan user yang sedang login
   const fetchRiwayat = async () => {
     setLoading(true);
+    setError(null);
     try {
-      // Dapatkan user yang sedang aktif
-      const { data: { user } } = await supabase.auth.getUser();
+      // 1. Cek User Login
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
       
-      if (!user) {
-        setBookings([]);
-        setLoading(false);
-        return;
+      if (authError || !user) {
+        throw new Error('Anda harus login untuk melihat riwayat.');
       }
 
-      // Query hanya mengambil data yang user_id-nya sesuai dengan user yang login
-      const { data, error } = await supabase
+      console.log("Mencari data untuk User ID:", user.id);
+
+      // 2. Query Data
+      const { data, error: queryError } = await supabase
         .from('bookings')
         .select(`
           id,
@@ -33,13 +34,16 @@ export default function RiwayatPembayaranPage() {
           guests (nama, no_hp),
           payments (metode, status)
         `)
-        .eq('user_id', user.id) // <--- INI PERUBAHAN UTAMANYA
+        .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (queryError) throw queryError;
+
+      console.log("Data ditemukan:", data);
       setBookings(data || []);
     } catch (err: any) {
-      console.error('Gagal memuat riwayat:', err.message);
+      console.error('Error:', err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -65,7 +69,9 @@ export default function RiwayatPembayaranPage() {
       <h2 className="text-3xl font-bold mb-8 text-center">Riwayat Pemesanan Saya</h2>
 
       {loading ? (
-        <div className="text-center py-10 text-gray-500">Memuat data...</div>
+        <div className="text-center py-10">Memuat data...</div>
+      ) : error ? (
+        <div className="text-center py-10 text-red-600 font-semibold">{error}</div>
       ) : bookings.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 border rounded-2xl space-y-4">
           <p className="text-gray-500">Belum ada riwayat pemesanan di akun Anda.</p>
@@ -84,7 +90,9 @@ export default function RiwayatPembayaranPage() {
                 <p className="text-sm text-gray-600">Durasi: {b.lama_menginap} Malam</p>
               </div>
               <div className="text-right">
-                <p className="text-xl font-extrabold text-blue-600">Rp {b.total_harga.toLocaleString('id-ID')}</p>
+                <p className="text-xl font-extrabold text-blue-600">
+                  Rp {b.total_harga?.toLocaleString('id-ID') || '0'}
+                </p>
               </div>
             </div>
           ))}
