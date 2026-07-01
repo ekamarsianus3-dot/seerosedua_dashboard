@@ -9,11 +9,13 @@ export default function KelolaTamuPage() {
 
   const fetchGuests = async () => {
     setLoading(true);
-    // Mengambil data dari tabel payments karena bukti_transfer tersimpan di sana
+    // Pastikan query ini mengambil ID yang tepat untuk proses delete nanti
     const { data, error } = await supabase
       .from('payments')
       .select(`
+        id,
         bukti_transfer,
+        status,
         bookings (
           guests (id, nama, no_hp, alamat)
         )
@@ -23,14 +25,15 @@ export default function KelolaTamuPage() {
     if (error) {
       console.error("Error fetching data:", error);
     } else if (data) {
-      // Memetakan data agar sesuai dengan struktur tabel
       const formatted = data.map((item: any) => ({
-        id: item.bookings?.guests?.id,
+        payment_id: item.id, // ID untuk update status/hapus pembayaran
+        guest_id: item.bookings?.guests?.id,
         nama: item.bookings?.guests?.nama,
         no_hp: item.bookings?.guests?.no_hp,
         alamat: item.bookings?.guests?.alamat,
-        bukti: item.bukti_transfer
-      })).filter(item => item.nama); // Hanya ambil yang ada nama tamunya
+        bukti: item.bukti_transfer,
+        status: item.status
+      })).filter(item => item.nama);
       
       setGuests(formatted);
     }
@@ -41,12 +44,20 @@ export default function KelolaTamuPage() {
     fetchGuests();
   }, []);
 
-  const handleHapusTamu = async (id: number) => {
-    if (confirm('Apakah Anda yakin ingin menghapus data laporan tamu ini?')) {
-      const { error } = await supabase.from('guests').delete().eq('id', id);
+  // Perbaikan: Hapus berdasarkan ID Pembayaran atau sesuaikan relasi
+  const handleHapusTamu = async (payment_id: number) => {
+    if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+      const { error } = await supabase.from('payments').delete().eq('id', payment_id);
       if (error) alert('Gagal menghapus: ' + error.message);
       else fetchGuests();
     }
+  };
+
+  // Fungsi untuk Update Status (Setuju/Tolak)
+  const handleUpdateStatus = async (payment_id: number, status: string) => {
+    const { error } = await supabase.from('payments').update({ status }).eq('id', payment_id);
+    if (error) alert('Gagal update status: ' + error.message);
+    else fetchGuests();
   };
 
   return (
@@ -59,46 +70,37 @@ export default function KelolaTamuPage() {
             <tr className="bg-gray-50 border-b">
               <th className="p-4 font-semibold">Nama Tamu</th>
               <th className="p-4 font-semibold">No. HP</th>
-              <th className="p-4 font-semibold">Alamat</th>
               <th className="p-4 font-semibold">Bukti Bayar</th>
               <th className="p-4 font-semibold">Aksi</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={5} className="p-4 text-center">Memuat data...</td></tr>
+              <tr><td colSpan={4} className="p-4 text-center">Memuat data...</td></tr>
             ) : guests.length === 0 ? (
-              <tr><td colSpan={5} className="p-4 text-center">Tidak ada laporan data tamu.</td></tr>
+              <tr><td colSpan={4} className="p-4 text-center">Tidak ada laporan data tamu.</td></tr>
             ) : guests.map((g, i) => (
               <tr key={i} className="border-b hover:bg-gray-50">
                 <td className="p-4 font-medium">{g.nama}</td>
                 <td className="p-4">{g.no_hp || '-'}</td>
-                <td className="p-4 text-gray-600 text-sm">{g.alamat}</td>
                 <td className="p-4">
                   {g.bukti ? (
-                    <a 
-                      href={g.bukti} 
-                      target="_blank" 
-                      rel="noopener noreferrer" 
-                      className="text-blue-600 underline text-sm"
-                    >
-                      Lihat Bukti
-                    </a>
+                    <a href={g.bukti} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">Lihat Bukti</a>
                   ) : <span className="text-gray-400 text-sm">Tidak ada</span>}
                 </td>
                 <td className="p-4 space-x-2">
-                  <button className="border border-green-600 text-green-600 hover:bg-green-50 px-3 py-1 rounded-lg text-sm transition">
-                    Setuju
-                  </button>
-                  <button className="border border-yellow-600 text-yellow-600 hover:bg-yellow-50 px-3 py-1 rounded-lg text-sm transition">
-                    Tolak
-                  </button>
                   <button 
-                    onClick={() => handleHapusTamu(g.id)} 
+                    onClick={() => handleUpdateStatus(g.payment_id, 'CONFIRMED')}
+                    className="border border-green-600 text-green-600 hover:bg-green-50 px-3 py-1 rounded-lg text-sm transition"
+                  >Setuju</button>
+                  <button 
+                    onClick={() => handleUpdateStatus(g.payment_id, 'CANCELLED')}
+                    className="border border-yellow-600 text-yellow-600 hover:bg-yellow-50 px-3 py-1 rounded-lg text-sm transition"
+                  >Tolak</button>
+                  <button 
+                    onClick={() => handleHapusTamu(g.payment_id)} 
                     className="border border-red-600 text-red-600 hover:bg-red-50 px-3 py-1 rounded-lg text-sm transition"
-                  >
-                    Hapus
-                  </button>
+                  >Hapus</button>
                 </td>
               </tr>
             ))}
