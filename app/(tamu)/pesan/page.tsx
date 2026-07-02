@@ -18,7 +18,7 @@ function BookingFormContent() {
   const [totalHarga, setTotalHarga] = useState(0);
 
   const hargaKamar = roomType === 'ac' ? 200000 : 150000;
-  const biayaExtra = extraKasur ? 35000 : 0;
+  const biayaExtra = extraKasur ? 50000 : 0;
 
   useEffect(() => {
     if (queryType === '2') {
@@ -121,7 +121,7 @@ function BookingFormContent() {
             className="w-5 h-5 accent-amber-600"
           />
           <label htmlFor="kasur" className="text-sm font-medium text-amber-900 cursor-pointer select-none">
-            Tambah Ekstra Kasur (+Rp 35.000 / malam)
+            Tambah Ekstra Kasur (+Rp 50.000 / malam)
           </label>
         </div>
 
