@@ -108,7 +108,7 @@ export default function PembayaranPage() {
         <p><strong>Tanggal Check-In:</strong> {tx.tanggalCheckIn ? new Date(tx.tanggalCheckIn).toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : '-'}</p>
         <p><strong>Tipe Kamar:</strong> {tx.roomType}</p>
         <p><strong>Durasi:</strong> {tx.lamaMenginap} Malam</p>
-        <p><strong>Fasilitas:</strong> {tx.extraKasur ? 'Ekstra Kasur (+Rp 35.000)' : 'Standar'}</p>
+        <p><strong>Fasilitas:</strong> {tx.extraKasur ? 'Ekstra Kasur (+Rp 50.000)' : 'Standar'}</p>
         <div className="border-t pt-2 mt-2 font-bold text-lg flex justify-between">
           <span>Total Tagihan:</span>
           <span className="text-emerald-600">Rp {tx.totalHarga.toLocaleString('id-ID')}</span>
